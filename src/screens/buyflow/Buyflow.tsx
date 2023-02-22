@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import AgeStep from './AgeStep'
 import EmailStep from './EmailStep'
+import NameStep from './NameStep'
 import SummaryStep from './SummaryStep'
 
 interface BuyflowProps {
@@ -14,11 +15,11 @@ export enum ProductIds {
 
 const PRODUCTS = {
   [ProductIds.devIns]: {
-    name: 'Developer Insurance',
+    title: 'Developer Insurance',
     steps: ['email', 'age', 'summary'],
   },
   [ProductIds.desigrIns]: {
-    name: 'Designer Insurance',
+    title: 'Designer Insurance',
     steps: ['email', 'age', 'name', 'summary'],
   },
 }
@@ -37,14 +38,12 @@ const DEFAULT_NAME_STATE = {
 
 const PRODUCT_DEFAULT_STATE = {
   [ProductIds.devIns]: DEFAULT_STATE,
-  [ProductIds.desigrIns]: Object.assign(DEFAULT_STATE, DEFAULT_NAME_STATE),
+  [ProductIds.desigrIns]: Object.assign(DEFAULT_NAME_STATE, DEFAULT_STATE),
 }
 
 const Buyflow: React.FC<BuyflowProps> = (props) => {
   const [currentStep, setStep] = useState(0)
-  const [collectedData, updateData] = useState(
-    PRODUCT_DEFAULT_STATE[props.productId]
-  )
+  const [collectedData, updateData] = useState(PRODUCT_DEFAULT_STATE[props.productId])
 
   const getStepCallback = () => (field: string, value: any) => {
     updateData({ ...collectedData, [field]: value })
@@ -57,8 +56,10 @@ const Buyflow: React.FC<BuyflowProps> = (props) => {
         return <EmailStep cb={getStepCallback()} />
       case 'age':
         return <AgeStep cb={getStepCallback()} />
+      case 'name':
+        return <NameStep cb={getStepCallback()} />
       case 'summary':
-        return <SummaryStep collectedData={collectedData} />
+        return <SummaryStep collectedData={collectedData} productId={props.productId} />
       default:
         return <></>
     }
@@ -66,7 +67,7 @@ const Buyflow: React.FC<BuyflowProps> = (props) => {
 
   return (
     <>
-      <h4>Buying {PRODUCTS[props.productId]?.name}</h4>
+      <h4>Buying {PRODUCTS[props.productId]?.title}</h4>
       {renderStep(PRODUCTS[props.productId]?.steps[currentStep])}
     </>
   )
