@@ -9,32 +9,65 @@ interface BuyflowProps {
 
 export enum ProductIds {
   devIns = 'dev_ins',
+  desigrIns = 'desigr_ins',
 }
 
-const PRODUCT_IDS_TO_NAMES = {
-  [ProductIds.devIns]: 'Developer Insurance',
+const PRODUCTS = {
+  [ProductIds.devIns]: {
+    name: 'Developer Insurance',
+    steps: ['email', 'age', 'summary'],
+  },
+  [ProductIds.desigrIns]: {
+    name: 'Designer Insurance',
+    steps: ['email', 'age', 'name', 'summary'],
+  },
+}
+
+const DEFAULT_STATE = {
+  email: '',
+  age: 0,
+}
+
+const DEFAULT_NAME_STATE = {
+  name: {
+    firstName: '',
+    lastName: '',
+  },
+}
+
+const PRODUCT_DEFAULT_STATE = {
+  [ProductIds.devIns]: DEFAULT_STATE,
+  [ProductIds.desigrIns]: Object.assign(DEFAULT_STATE, DEFAULT_NAME_STATE),
 }
 
 const Buyflow: React.FC<BuyflowProps> = (props) => {
-  const [currentStep, setStep] = useState('email')
-  const [collectedData, updateData] = useState({
-    email: '',
-    age: 0,
-  })
-  const getStepCallback = (nextStep: string) => (field: string, value: any) => {
+  const [currentStep, setStep] = useState(0)
+  const [collectedData, updateData] = useState(
+    PRODUCT_DEFAULT_STATE[props.productId]
+  )
+
+  const getStepCallback = () => (field: string, value: any) => {
     updateData({ ...collectedData, [field]: value })
-    setStep(nextStep)
+    setStep(currentStep + 1)
   }
+
+  const renderStep = (param: string) => {
+    switch (param) {
+      case 'email':
+        return <EmailStep cb={getStepCallback()} />
+      case 'age':
+        return <AgeStep cb={getStepCallback()} />
+      case 'summary':
+        return <SummaryStep collectedData={collectedData} />
+      default:
+        return <></>
+    }
+  }
+
   return (
     <>
-      <h4>Buying {PRODUCT_IDS_TO_NAMES[props.productId]}</h4>
-      {(currentStep === 'email' && <EmailStep cb={getStepCallback('age')} />) ||
-        (currentStep === 'age' && (
-          <AgeStep cb={getStepCallback('summary')} />
-        )) ||
-        (currentStep === 'summary' && (
-          <SummaryStep collectedData={collectedData} />
-        ))}
+      <h4>Buying {PRODUCTS[props.productId]?.name}</h4>
+      {renderStep(PRODUCTS[props.productId]?.steps[currentStep])}
     </>
   )
 }
