@@ -1,25 +1,34 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { Type as TextFieldType, Input } from '../../components/TextField/TextField'
+import Form from '../../components/Form/Form'
 
 interface AgeStepProps {
-  cb: (field: string, value: number) => void
+  cb: (value: number) => void
 }
 
+const inputs: Input[] = [
+  {
+    id: "age",
+    label: "Age",
+    inputType: TextFieldType.number,
+    errorText: "Please enter a valid age greater than 18!",
+    initialValue: "",
+    isRequired: true,
+    customValidity: (value) => {
+      const numberValue = Number(value)
+      return !isNaN(numberValue) && numberValue > 18
+    }
+  }];
+
 const AgeStep: React.FC<AgeStepProps> = (props) => {
-  const [age, setAge] = useState(0)
+
   return (
-    <>
-      <div>
-        Age:{' '}
-        <input
-          type="number"
-          onChange={({ target: { value } }) => {
-            setAge(Number(value))
-          }}
-          value={age}
-        ></input>
-      </div>
-      <button onClick={() => props.cb('age', age)}>Next</button>
-    </>
+    <Form
+      title="Please enter your age"
+      submitText="Next"
+      onSubmitAction={(value) => props.cb(Number(value))}
+      inputs={inputs}>
+    </Form>
   )
 }
 

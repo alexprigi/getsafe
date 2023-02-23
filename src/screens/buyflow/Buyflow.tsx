@@ -13,24 +13,31 @@ export enum ProductIds {
   desigrIns = 'desigr_ins',
 }
 
+export enum Steps {
+  email = 'email',
+  age = 'age',
+  name = 'name',
+  summary = 'summary',
+}
+
 const PRODUCTS = {
   [ProductIds.devIns]: {
     title: 'Developer Insurance',
-    steps: ['email', 'age', 'summary'],
+    steps: [Steps.email, Steps.age, Steps.summary],
   },
   [ProductIds.desigrIns]: {
     title: 'Designer Insurance',
-    steps: ['email', 'age', 'name', 'summary'],
+    steps: [Steps.email, Steps.age, Steps.name, Steps.summary],
   },
 }
 
 const DEFAULT_STATE = {
-  email: '',
-  age: 0,
+  [Steps.email]: '',
+  [Steps.age]: 0,
 }
 
 const DEFAULT_NAME_STATE = {
-  name: {
+  [Steps.name]: {
     firstName: '',
     lastName: '',
   },
@@ -42,11 +49,13 @@ const PRODUCT_DEFAULT_STATE = {
 }
 
 const Buyflow: React.FC<BuyflowProps> = (props) => {
+  const { productId } = props;
   const [currentStep, setStep] = useState(0)
   const [collectedData, updateData] = useState(PRODUCT_DEFAULT_STATE[props.productId])
 
-  const getStepCallback = () => (field: string, value: any) => {
-    updateData({ ...collectedData, [field]: value })
+  const getStepCallback = () => (value: any) => {
+    const steps = PRODUCTS[productId].steps;
+    updateData({ ...collectedData, [steps[currentStep]]: value })
     setStep(currentStep + 1)
   }
 
