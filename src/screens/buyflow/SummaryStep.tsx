@@ -16,20 +16,20 @@ interface SummaryStepProps {
 const SummaryStep: React.FC<SummaryStepProps> = (props) => {
   const renderName = () => {
     return <>
-      <div>Firstname: {props.collectedData?.name?.firstName}</div>
-      <div>Lastname: {props.collectedData?.name?.lastName}</div>
+      <div>Firstname: <span data-testid="firstName">{props.collectedData?.name?.firstName}</span></div>
+      <div>Lastname: <span data-testid="lastName">{props.collectedData?.name?.lastName}</span></div>
     </>
   }
 
   return (
     <>
-      <div>Email: {props.collectedData.email}</div>
-      <div>Age: {props.collectedData.age}</div> 
+      <div>Email: <span data-testid="email">{props.collectedData.email}</span></div>
+      <div>Age: <span data-testid="age">{props.collectedData.age}</span></div> 
       
       {props.collectedData.name ? renderName() : null}
       
       <div>
-        <Link to={ROUTES.PURCHASED + `=${props.productId}`}> Purchase</Link>
+        <Link data-testid="purchase-link" to={ROUTES.PURCHASED + `=${props.productId}`}> Purchase</Link>
       </div>
     </>
   )

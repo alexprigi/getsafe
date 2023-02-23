@@ -37,12 +37,12 @@ const App = () => {
             <div style={containerStyle}>
               <div style={itemStyle}>
                 <p>Are you a Developer?</p>
-                <Link to={ROUTES.BUY_INS_DEV}>Get started my dear Developer!</Link>
+                <Link data-testid="dev-link" to={ROUTES.BUY_INS_DEV}>Get started my dear Developer!</Link>
               </div>
 
               <div style={itemStyle}>
                 <p>Are you a Designer?</p>
-                <Link to={ROUTES.BUY_INS_DESIGNR}>Get started my dear Designer!</Link>
+                <Link  data-testid="designr-link"  to={ROUTES.BUY_INS_DESIGNR}>Get started my dear Designer!</Link>
               </div>
             </div>
           </Route>

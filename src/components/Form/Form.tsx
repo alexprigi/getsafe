@@ -63,7 +63,7 @@ const Form: React.FC<FormProps> = (props) => {
                 return renderInput(input);
             })}
 
-            <input type="submit" value={submitText} />
+            <input data-testid="submit" type="submit" value={submitText} />
         </form>
     );
 };

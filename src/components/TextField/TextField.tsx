@@ -85,6 +85,7 @@ const TextField: React.FC<TextFieldProps> = (props) => {
                 {label && <span>{label}:</span>}
                 <input
                     key={id}
+                    data-testid={id}
                     type={inputType}
                     required={isRequired}
                     onChange={textChangeHandler}
